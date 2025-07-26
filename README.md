@@ -1,7 +1,5 @@
 # Calculadora Avançada com Histórico de Operações
 
-![Layout da Calculadora](Kogui_Teste_Dev_Python_Django_Layout_Referencia.jpg)
-
 Este projeto consiste num portal web que integra uma calculadora funcional, capaz de realizar operações básicas (soma, subtração, multiplicação e divisão). A aplicação foi desenvolvida com um sistema robusto de autenticação (login e senha) e uma funcionalidade essencial de registo de histórico, que armazena todas as operações realizadas por cada utilizador num banco de dados local. O histórico é exibido de forma conveniente ao lado da calculadora, permitindo aos utilizadores reverem os seus cálculos anteriores.
 
 Este projeto foi desenvolvido como parte de um desafio técnico proposto pela Kogui, com o objetivo de demonstrar habilidades em desenvolvimento web com Django, gestão de bases de dados e lógica de programação.
@@ -30,7 +28,6 @@ O principal objetivo era criar um portal interativo com uma calculadora, garanti
 * **Banco de Dados:** [SQLite](https://www.sqlite.org/index.html) (configurado como banco de dados local padrão do Django)
 * **Front-end:** HTML, CSS, JavaScript (para a lógica da calculadora e interatividade)
 * **Avaliação de Expressões:** `asteval` (para avaliação segura de expressões matemáticas)
-* **Containerização:** [Docker](https://www.docker.com/)
 
 ## Considerações de Segurança: Por Que `asteval`?
 
@@ -103,7 +100,7 @@ Certifique-se de ter o [Python 3.x](https://www.python.org/downloads/) e o [pip]
 1.  **Clone o Repositório:**
     Comece por clonar o projeto do GitHub para a sua máquina local:
     ```bash
-    git clone [https://github.com/davidwilliamx/calculadora-django.git](https://github.com/davidwilliamx/calculadora-django.git)
+    git clone https://github.com/davidwilliamx/calculadora-django.git
     cd calculadora-django
     ```
 
@@ -205,10 +202,5 @@ Este projeto foi desenvolvido com foco nos seguintes critérios de avaliação:
 
 Contribuições são bem-vindas! Se você tiver sugestões, melhorias ou encontrar algum problema, sinta-se à vontade para abrir uma *issue* ou enviar um *pull request* no repositório.
 
-## Licença
-
-Este projeto está licenciado sob a [Licença MIT](https://opensource.org/licenses/MIT).
-
 ---
-Desenvolvido com ❤ por [Seu Nome/Usuário do GitHub]
-
+Desenvolvido com ❤ por [David Magalhães]
