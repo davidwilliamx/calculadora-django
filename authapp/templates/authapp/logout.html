@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{% block title %}Logout{% endblock %}</title>
+	<link rel="stylesheet" href="{% static 'css/reset.css' %}">
+	<link rel="stylesheet" href="{% static 'css/global-variables.css' %}">
+	<link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+
+<body>
+	{% block content %}
+	<div class="auth-fullscreen-bg">
+		<div class="auth-form-container" role="alert" aria-label="Logout realizado">
+			<h2>Você saiu da sua conta.</h2>
+			<a href="{% url 'login' %}"><button>Fazer login novamente</button></a>
+		</div>
+	</div>
+	{% endblock %}
+</body>
+
+</html>

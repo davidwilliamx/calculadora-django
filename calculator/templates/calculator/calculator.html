@@ -1,0 +1,82 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{% block title %}Calculadora Avançada{% endblock %}</title>
+	<link rel="stylesheet" href="{% static 'css/reset.css' %}">
+	<link rel="stylesheet" href="{% static 'css/global-variables.css' %}">
+	<link rel="stylesheet" href="{% static 'css/calculator.css' %}">
+</head>
+
+<body>
+	{% block content %}
+	<div class="calc-header">
+		<div>
+			<h1>Calculadora Avançada</h1>
+			<p>Calculadora com histórico de operações</p>
+		</div>
+		<div class="user-logout">
+			<span class="user-name">{{ request.user.username }}</span>
+			<a href="{% url 'logout' %}" class="logout-btn" title="Sair">⎋ Logout</a>
+		</div>
+	</div>
+	<div class="calculator-container">
+		<div class="calc-panel">
+			<div id="display" class="calc-display">{{ resultado|default:"0" }}</div>
+			<div class="calc-buttons">
+				<button class="btn btn-red" data-action="clear">C</button>
+				<button class="btn" data-action="negate">±</button>
+				<button class="btn" data-action="percent">%</button>
+				<button class="btn btn-op" data-value="/">÷</button>
+				<button class="btn" data-value="7">7</button>
+				<button class="btn" data-value="8">8</button>
+				<button class="btn" data-value="9">9</button>
+				<button class="btn btn-op" data-value="*">×</button>
+				<button class="btn" data-value="4">4</button>
+				<button class="btn" data-value="5">5</button>
+				<button class="btn" data-value="6">6</button>
+				<button class="btn btn-op" data-value="-">−</button>
+				<button class="btn" data-value="1">1</button>
+				<button class="btn" data-value="2">2</button>
+				<button class="btn" data-value="3">3</button>
+				<button class="btn btn-op" data-value="+">+</button>
+				<button class="btn" style="grid-column: span 2;" data-value="0">0</button>
+				<button class="btn" data-value=".">.</button>
+				<button class="btn btn-eq" data-action="equals">=</button>
+			</div>
+			<form id="calc-form" method="post" style="display:none;">
+				{% csrf_token %}
+				<input type="hidden" name="expressao" id="expressao-input" value="">
+			</form>
+		</div>
+		<div class="history-panel">
+			<div class="history-header">
+				<span>⏱️ Histórico</span>
+				<form method="post" action="{% url 'limpar_historico' %}" id="limpar-form" style="display:inline;">
+					{% csrf_token %}
+					<button type="submit" class="btn-trash" title="Limpar histórico">🗑️</button>
+				</form>
+			</div>
+			<div class="history-list">
+				{% for op in historico %}
+				<div class="history-item">
+					<div class="history-expr">{{ op.parametros|default:"" }}</div>
+					<div class="history-res">= <span>{{ op.resultado }}</span></div>
+					<div class="history-time">{{ op.dt_inclusao|date:"H:i" }}</div>
+				</div>
+				{% empty %}
+				<div class="history-item">
+					<div class="history-expr">Nenhuma operação ainda.</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	<script src="{% static 'calculator/calculator.js' %}"></script>
+	{% endblock %}
+</body>
+
+</html>

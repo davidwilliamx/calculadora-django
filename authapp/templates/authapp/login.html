@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{% block title %}Login{% endblock %}</title>
+	<link rel="stylesheet" href="{% static 'css/reset.css' %}">
+	<link rel="stylesheet" href="{% static 'css/global-variables.css' %}">
+	<link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+
+<body>
+	{% block content %}
+	<div class="auth-fullscreen-bg">
+		<div class="auth-form-container" role="form" aria-label="Formulário de login">
+			<h2>Login</h2>
+			<form method="post" autocomplete="on">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<button type="submit" aria-label="Entrar">Entrar</button>
+			</form>
+			<div class="switch-link">
+				Não tem uma conta? <a href="{% url 'register' %}">Cadastre-se</a>
+			</div>
+			{% if messages %}
+			<ul>
+				{% for message in messages %}
+				<li>{{ message }}</li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+		</div>
+	</div>
+	{% endblock %}
+</body>
+
+</html>
