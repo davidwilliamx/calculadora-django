@@ -1,0 +1,381 @@
+/* --- Estilos Globais (Mobile First - Padrão para telas pequenas e tablets) --- */
+body {
+    font-family: var(--font-family-primary);
+    background: linear-gradient(to bottom right, var(--color-primary-dark), var(--color-primary-light));
+    color: var(--color-text-primary);
+    margin: 0;
+    padding: var(--spacing-md); /* Padding geral para mobile e tablet */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; /* Conteúdo empilhado por padrão */
+    align-items: center; /* Centraliza horizontalmente o conteúdo */
+    justify-content: flex-start; /* Alinha o conteúdo ao topo em telas menores */
+    overflow-x: hidden; /* Evita rolagem horizontal */
+    box-sizing: border-box; /* Inclui padding e borda no tamanho do elemento */
+}
+
+/* --- Cabeçalho da Calculadora (Mobile First) --- */
+.calc-header {
+    display: flex;
+    flex-direction: column; /* Empilha os elementos do cabeçalho */
+    align-items: flex-start; /* Alinha o texto à esquerda */
+    width: 95%; /* Ocupa a maior parte da largura em mobile */
+    max-width: 450px; /* Limita a largura do cabeçalho em mobile/tablet */
+    margin-bottom: var(--spacing-lg);
+    box-sizing: border-box;
+    padding: 0;
+    text-align: left; /* Garante alinhamento do texto */
+}
+
+.calc-header h1 {
+    font-size: var(--font-size-lg); /* Tamanho menor para mobile e tablet */
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.2;
+    width: 100%; /* Ocupa a largura total */
+}
+
+.calc-header p {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+    width: 100%; /* Ocupa a largura total */
+}
+
+.user-logout {
+    display: flex;
+    flex-direction: column; /* Empilha nome e logout */
+    align-items: flex-start; /* Alinha à esquerda */
+    width: 100%;
+    margin-top: var(--spacing-sm);
+    gap: var(--spacing-sm);
+}
+
+.user-name {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.logout-btn {
+    background-color: transparent;
+    border: 1px solid var(--color-text-secondary);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+    justify-content: flex-start; /* Alinha o conteúdo do botão à esquerda */
+    width: 100%; /* Ocupa a largura total disponível */
+    box-sizing: border-box;
+}
+
+.logout-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-primary);
+    border-color: var(--color-text-primary);
+}
+
+/* --- Container Principal da Calculadora e Histórico (Mobile First) --- */
+.calculator-container {
+    display: flex;
+    flex-direction: column; /* **Este é o padrão: empilhado (uma coluna)** */
+    gap: var(--spacing-lg); /* Espaçamento entre os painéis */
+    width: 95%; /* Usa 95% da largura da tela */
+    max-width: 450px; /* Limita a largura máxima para o layout de uma coluna */
+    padding: 0; /* Painéis internos já têm padding */
+    box-sizing: border-box;
+}
+
+/* --- Painel da Calculadora (Mobile First) --- */
+.calc-panel {
+    background-color: var(--color-secondary-dark);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-lg); /* Padding para mobile/tablet */
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg); /* Espaçamento entre display e botões */
+    width: 100%; /* Ocupa a largura total do container pai */
+    box-sizing: border-box;
+}
+
+/* Display da Calculadora */
+.calc-display {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: var(--color-text-primary);
+    font-size: 2.5rem; /* Ajuste para mobile/tablet */
+    font-weight: var(--font-weight-bold);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    text-align: right;
+    word-break: break-all;
+    min-height: 70px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+
+/* Botões da Calculadora */
+.calc-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 colunas */
+    gap: var(--spacing-sm); /* Espaçamento entre os botões */
+}
+
+.btn {
+    background-color: var(--color-secondary-light);
+    border: none;
+    border-radius: var(--border-radius-md);
+    color: var(--color-text-primary);
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-lg); /* Tamanho maior para facilitar o toque */
+    font-weight: var(--font-weight-medium);
+    height: 65px; /* Altura para botões de mobile/tablet */
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    box-shadow: var(--shadow-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0);
+    filter: brightness(0.9);
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilos específicos para tipos de botões */
+.btn-red {
+    background-color: var(--color-alert);
+}
+
+.btn-red:hover {
+    background-color: #D94132;
+}
+
+.btn-op {
+    background-color: var(--color-action-secondary);
+}
+
+.btn-op:hover {
+    background-color: #8E44AD;
+}
+
+.btn-eq {
+    background-color: var(--color-action-primary);
+    box-shadow: 0px 4px 10px rgba(var(--shadow-action-rgb), 0.4);
+}
+
+.btn-eq:hover {
+    background-color: #2980B9;
+}
+
+/* Ajuste para o botão '0' que ocupa 2 colunas */
+.btn[data-value="0"] {
+    grid-column: span 2;
+}
+
+
+/* --- Painel de Histórico (Mobile First) --- */
+.history-panel {
+    background-color: var(--color-secondary-dark);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-lg); /* Padding para mobile/tablet */
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    width: 100%; /* Ocupa a largura total do container pai */
+    box-sizing: border-box;
+    overflow: hidden;
+    min-height: 150px; /* Altura mínima para o histórico em mobile/tablet */
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semi-bold);
+}
+
+.btn-trash {
+    background: none;
+    border: none;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-lg);
+    cursor: pointer;
+    transition: color 0.2s ease;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.btn-trash:hover {
+    color: var(--color-alert);
+}
+
+.history-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-action-primary) var(--color-secondary-light);
+    padding-right: var(--spacing-xs);
+}
+
+/* Estilo da scrollbar para WebKit (Chrome, Safari) */
+.history-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.history-list::-webkit-scrollbar-track {
+    background: var(--color-secondary-light);
+    border-radius: var(--border-radius-sm);
+}
+
+.history-list::-webkit-scrollbar-thumb {
+    background: var(--color-action-primary);
+    border-radius: var(--border-radius-sm);
+}
+
+.history-item {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    flex-direction: column;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
+}
+
+.history-item:last-child {
+    margin-bottom: 0;
+}
+
+.history-expr {
+    font-weight: var(--font-weight-regular);
+    margin-bottom: 5px;
+    word-break: break-all;
+}
+
+.history-res {
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-md);
+    color: var(--color-text-primary);
+    margin-bottom: 5px;
+    word-break: break-all;
+}
+
+.history-res span {
+    font-weight: var(--font-weight-bold);
+}
+
+.history-time {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-secondary);
+    text-align: right;
+}
+
+/* --- Media Query para Desktop (a partir de 940px) --- */
+@media (min-width: 940px) {
+    body {
+        padding: var(--spacing-xl) 0; /* Volta ao padding vertical maior */
+        justify-content: center; /* Centraliza verticalmente */
+    }
+
+    /* Cabeçalho */
+    .calc-header {
+        flex-direction: row; /* Volta a ser lado a lado */
+        justify-content: space-between;
+        align-items: center;
+        width: 90%; /* Ocupa 90% da largura em desktop */
+        max-width: 900px; /* Alinha com a largura máxima do calculator-container */
+        padding: 0 var(--spacing-md);
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .calc-header h1 {
+        font-size: var(--font-size-xl); /* Retorna ao tamanho maior */
+        width: auto;
+    }
+
+    .calc-header p {
+        font-size: var(--font-size-sm);
+        width: auto;
+    }
+
+    .user-logout {
+        flex-direction: row; /* Volta a ser lado a lado */
+        align-items: center;
+        width: auto;
+        margin-top: 0;
+        gap: var(--spacing-sm);
+    }
+
+    .user-name, .logout-btn {
+        max-width: none; /* Remove a limitação de largura */
+        width: auto;
+        justify-content: flex-end;
+    }
+
+    /* Container principal da calculadora (Duas Colunas) */
+    .calculator-container {
+        flex-direction: row; /* **AGORA MUDA PARA DUAS COLUNAS EM 940px** */
+        justify-content: center; /* Centraliza os painéis */
+        align-items: flex-start; /* Alinha os painéis pelo topo */
+        gap: var(--spacing-xl); /* Espaçamento entre as colunas */
+        width: 90%; /* Ocupa 90% da largura disponível */
+        max-width: 900px; /* Largura total que as duas colunas podem ocupar (conforme a imagem) */
+        padding: 0;
+    }
+
+    /* Painéis da calculadora e histórico */
+    .calc-panel {
+        padding: var(--spacing-xl); /* Volta ao padding maior */
+        width: 500px; /* Largura fixa para a calculadora conforme imagem */
+        flex-shrink: 0; /* Impede que ele encolha */
+    }
+
+    .calc-display {
+        font-size: var(--font-size-xxl); /* Retorna ao tamanho grande */
+        padding: var(--spacing-md);
+        min-height: 80px;
+    }
+
+    .btn {
+        height: 70px; /* Volta à altura ideal dos botões */
+    }
+
+    .history-panel {
+        padding: var(--spacing-xl); /* Volta ao padding maior */
+        width: 380px; /* Largura fixa para o histórico conforme imagem */
+        flex-shrink: 0; /* Impede que ele encolha */
+        max-height: 600px; /* Limita a altura do histórico para não ficar muito longo */
+        min-height: auto; /* Remove a altura mínima para desktop */
+        /* Para alinhar com a altura da calculadora se necessário: */
+        display: flex;
+        flex-direction: column;
+    }
+}

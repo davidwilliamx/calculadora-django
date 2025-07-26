@@ -1,0 +1,243 @@
+/* Importação da fonte Poppins do Google Fonts */
+/* Se Poppins já estiver sendo importada globalmente via reset.css ou um CSS base,
+   esta linha pode ser removida para evitar duplicação.
+   Deixei aqui para garantir que a fonte seja carregada se este for o único CSS. */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* --- Estilos para o Fundo em Tela Cheia (Mobile First) --- */
+.auth-fullscreen-bg {
+    /* Ocupa a altura total da viewport */
+    min-height: 100vh;
+    /* Usa o mesmo gradiente de fundo do body da calculadora para consistência */
+    background: linear-gradient(to bottom right, var(--color-primary-dark), var(--color-primary-light));
+    display: flex; /* Para centralizar o formulário */
+    align-items: center; /* Centraliza verticalmente */
+    justify-content: center; /* Centraliza horizontalmente */
+    padding: var(--spacing-lg) var(--spacing-md); /* Padding para respiro em telas pequenas */
+    box-sizing: border-box; /* Inclui padding no cálculo da largura/altura */
+    flex-direction: column; /* Em mobile, pode haver outros elementos, então flex-direction column é mais seguro */
+}
+
+/* --- Container Principal do Formulário de Autenticação (Mobile First) --- */
+.auth-form-container {
+    background-color: var(--color-secondary-dark); /* Fundo escuro para o painel */
+    border-radius: var(--border-radius-lg); /* Bordas arredondadas */
+    box-shadow: var(--shadow-md); /* Sombra para profundidade */
+    padding: var(--spacing-xl); /* Padding interno generoso */
+    width: 90%; /* Ocupa 90% da largura em mobile */
+    max-width: 400px; /* Limita a largura para um visual agradável em mobile/tablet */
+    color: var(--color-text-primary); /* Cor do texto padrão */
+    font-family: var(--font-family-primary); /* Fonte principal */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg); /* Espaçamento entre os blocos (título, form, link) */
+}
+
+.auth-form-container h2 {
+    font-size: var(--font-size-xl); /* Tamanho do título "Login" */
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    text-align: center; /* Centraliza o título */
+    margin-bottom: var(--spacing-md); /* Espaçamento abaixo do título */
+}
+
+/* --- Estilos para o Formulário em si --- */
+.auth-form-container form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md); /* Espaçamento entre os campos do formulário */
+}
+
+/* Estilos para os parágrafos que Django gera para cada campo ({{ form.as_p }}) */
+.auth-form-container form p {
+    margin: 0; /* Remove margem padrão de parágrafos */
+    display: flex;
+    flex-direction: column; /* Label em cima do input */
+    gap: var(--spacing-xs); /* Espaçamento entre label e input */
+}
+
+/* Estilos para os Labels (se Django os renderizar dentro de <p>) */
+.auth-form-container form p label {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+}
+
+/* Estilos para os Campos de Input (text, password, etc.) */
+.auth-form-container form input[type="text"],
+.auth-form-container form input[type="password"],
+.auth-form-container form input[type="email"] { /* Adicionado para flexibilidade futura */
+    background-color: var(--color-secondary-light); /* Fundo do input */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Borda sutil */
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-sm); /* Padding interno do input */
+    color: var(--color-text-primary); /* Cor do texto digitado */
+    font-size: var(--font-size-base);
+    width: 100%; /* Ocupa a largura total */
+    box-sizing: border-box; /* Inclui padding e borda na largura total */
+    outline: none; /* Remove outline padrão ao focar */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.auth-form-container form input[type="text"]:focus,
+.auth-form-container form input[type="password"]:focus,
+.auth-form-container form input[type="email"]:focus {
+    border-color: var(--color-action-primary); /* Borda azul ao focar */
+    box-shadow: 0 0 0 3px rgba(var(--shadow-action-rgb), 0.3); /* Sombra azul ao focar */
+}
+
+/* Estilos para Placeholders */
+.auth-form-container form input::placeholder {
+    color: var(--color-text-secondary);
+    opacity: 0.7;
+}
+
+/* Estilos para o Botão de Submit */
+.auth-form-container button[type="submit"] {
+    background-color: var(--color-action-primary); /* Cor primária do botão */
+    border: none;
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semi-bold);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    width: 100%; /* Ocupa a largura total */
+    box-shadow: 0px 4px 10px rgba(var(--shadow-action-rgb), 0.4); /* Sombra de ação */
+    margin-top: var(--spacing-md); /* Espaçamento acima do botão */
+    -webkit-tap-highlight-color: transparent;
+}
+
+.auth-form-container button[type="submit"]:hover {
+    background-color: #2980B9; /* Azul um pouco mais escuro */
+    transform: translateY(-2px); /* Efeito de "levantar" */
+}
+
+.auth-form-container button[type="submit"]:active {
+    transform: translateY(0); /* Volta à posição normal ao clicar */
+    filter: brightness(0.9); /* Escurece um pouco ao clicar */
+    box-shadow: 0px 2px 5px rgba(var(--shadow-action-rgb), 0.3); /* Sombra mais compacta ao clicar */
+}
+
+/* --- Estilos para o Link de Troca (Cadastre-se) --- */
+.switch-link {
+    text-align: center; /* Centraliza o texto */
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    margin-top: var(--spacing-md); /* Espaçamento acima do link */
+}
+
+.switch-link a {
+    color: var(--color-action-primary); /* Cor do link */
+    text-decoration: none; /* Sem sublinhado padrão */
+    font-weight: var(--font-weight-medium);
+    transition: color 0.2s ease;
+}
+
+.switch-link a:hover {
+    color: #2980B9; /* Azul um pouco mais escuro ao passar o mouse */
+    text-decoration: underline; /* Sublinhado ao passar o mouse */
+}
+
+/* --- Estilos para Mensagens (Django Messages Framework) --- */
+.auth-form-container ul {
+    list-style: none; /* Remove bullet points */
+    padding: 0;
+    margin-top: var(--spacing-md);
+    margin-bottom: 0;
+}
+
+.auth-form-container ul li {
+    background-color: rgba(231, 76, 60, 0.2); /* Fundo vermelho translúcido para erro */
+    color: var(--color-alert); /* Cor do texto de erro */
+    border: 1px solid var(--color-alert);
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    margin-bottom: var(--spacing-sm); /* Espaçamento entre mensagens */
+    font-size: var(--font-size-sm);
+    text-align: center;
+}
+
+/* Exemplo de outras cores para mensagens (se você usar tags de mensagem como 'success', 'info') */
+.auth-form-container ul li.success {
+    background-color: rgba(46, 204, 113, 0.2); /* Verde translúcido */
+    color: #2ECC71; /* Verde */
+    border-color: #2ECC71;
+}
+
+.auth-form-container ul li.info {
+    background-color: rgba(52, 152, 219, 0.2); /* Azul translúcido */
+    color: var(--color-action-primary); /* Azul */
+    border-color: var(--color-action-primary);
+}
+
+/* Estiliza o botão dentro de um link na página de logout para parecer com o botão de submit */
+.auth-form-container a {
+	text-decoration: none;
+}
+.auth-form-container a button {
+    background-color: var(--color-action-primary); /* Cor primária do botão */
+    border: none;
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: var(--color-text-primary);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semi-bold);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+    width: 100%; /* Ocupa a largura total */
+    box-shadow: 0px 4px 10px rgba(var(--shadow-action-rgb), 0.4); /* Sombra de ação */
+    margin-top: var(--spacing-md); /* Espaçamento acima do botão */
+    -webkit-tap-highlight-color: transparent;
+
+    /* Garante que o botão se comporte como um bloco para respeitar a largura e margem */
+    display: block;
+    text-align: center; /* Centraliza o texto dentro do botão */
+    text-decoration: none; /* Remove sublinhado se o navegador aplicar */
+}
+
+.auth-form-container a button:hover {
+    background-color: #2980B9; /* Azul um pouco mais escuro */
+    transform: translateY(-2px); /* Efeito de "levantar" */
+}
+
+.auth-form-container a button:active {
+    transform: translateY(0); /* Volta à posição normal ao clicar */
+    filter: brightness(0.9); /* Escurece um pouco ao clicar */
+    box-shadow: 0px 2px 5px rgba(var(--shadow-action-rgb), 0.3); /* Sombra mais compacta ao clicar */
+}
+
+/* Ajustes para o título na página de logout */
+.auth-form-container h2 {
+    margin-bottom: var(--spacing-xl); /* Mais espaço abaixo do título para o botão */
+}
+
+/* --- Media Queries (Ajustes para telas maiores) --- */
+
+/* Para telas maiores que mobile (e.g., tablets e desktops) */
+@media (min-width: 768px) {
+    .auth-fullscreen-bg {
+        padding: var(--spacing-xl); /* Mais padding em telas maiores */
+    }
+
+    .auth-form-container {
+        padding: var(--spacing-xxl); /* Mais padding interno */
+        max-width: 480px; /* Aumenta um pouco a largura do formulário */
+        gap: var(--spacing-xl); /* Mais espaçamento entre blocos */
+    }
+
+    .auth-form-container h2 {
+        font-size: var(--font-size-xl); /* Mantém o tamanho do título */
+    }
+
+    .auth-form-container form {
+        gap: var(--spacing-lg); /* Mais espaçamento entre os campos */
+    }
+
+    .auth-form-container button[type="submit"] {
+        padding: var(--spacing-md); /* Botão um pouco maior */
+        font-size: var(--font-size-lg); /* Fonte maior no botão */
+    }
+}

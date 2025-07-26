@@ -1,0 +1,66 @@
+/* static/css/global-variables.css */
+
+/* Importação da fonte Poppins do Google Fonts - Coloque aqui para ser global */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* --- Variáveis CSS Globais --- */
+:root {
+    /* Cores Primárias */
+    --color-primary-dark: #3F0E6D;
+    --color-primary-light: #5A1E9A;
+
+    /* Cores Secundárias (Fundos de Elementos) */
+    --color-secondary-dark: #26213A;
+    --color-secondary-light: #3D3750; /* Usado para botões padrão e inputs */
+
+    /* Cores de Ação/Destaque */
+    --color-action-primary: #3498DB;
+    --color-action-secondary: #9B59B6;
+
+    /* Cores de Alerta */
+    --color-alert: #E74C3C;
+
+    /* Cores de Texto */
+    --color-text-primary: #FFFFFF;
+    --color-text-secondary: #BDC3C7;
+
+    /* Família de Fonte */
+    --font-family-primary: 'Poppins', 'Inter', 'Open Sans', 'Roboto', sans-serif;
+
+    /* Pesos de Fonte */
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semi-bold: 600;
+    --font-weight-bold: 700;
+
+    /* Tamanhos de Fonte */
+    --font-size-xxl: 3.5rem; /* Display da calculadora (desktop) */
+    --font-size-xl: 2.2rem; /* Título principal (desktop) */
+    --font-size-lg: 1.5rem; /* Botões da calculadora, título de histórico (desktop) */
+    --font-size-md: 1.1rem; /* Texto de botões menores, nome de usuário */
+    --font-size-base: 1rem; /* 16px - Corpo de texto padrão, labels */
+    --font-size-sm: 0.9rem; /* Subtítulos, links menores, texto de histórico */
+    --font-size-xs: 0.8rem; /* Datas/horas no histórico, textos de apoio */
+
+    /* Espaçamentos */
+    --spacing-xs: 8px;
+    --spacing-sm: 12px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-xxl: 48px;
+
+    /* Bordas e Radius */
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+
+    /* Sombras */
+    --shadow-light: 0px 2px 5px rgba(0, 0, 0, 0.15);
+    --shadow-md: 0px 8px 20px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0px 10px 30px rgba(0, 0, 0, 0.4);
+    --shadow-action-rgb: 52, 152, 219; /* RGB de --color-action-primary (#3498DB) */
+
+    /* Breakpoints (Mantenha aqui, pois são variáveis globais) */
+    --breakpoint-desktop: 940px;
+}
