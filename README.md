@@ -13,6 +13,64 @@ O principal objetivo era criar um portal interativo com uma calculadora, garanti
 * Gravação dos parâmetros da operação (ex: "1+2") e do resultado (ex: "3") no banco de dados.
 * Exibição do histórico de operações mais recentes para o utilizador logado.
 
+## Como a aplicação atende ao desafio proposto
+
+Este projeto foi desenvolvido para responder ao desafio técnico da Kogui, que propõe a criação de um portal com uma calculadora capaz de realizar operações básicas, com autenticação e histórico de operações por usuário. A seguir, detalhamos como cada requisito do desafio é atendido pela aplicação:
+
+### Problemas/Desafios Propostos
+
+- **1. Página de Login e Senha:**
+  O desafio exige que o portal tenha autenticação via login e senha, garantindo acesso individualizado para cada usuário.
+
+- **2. Operações Matemáticas:**
+  A calculadora deve permitir operações de soma, subtração, multiplicação e divisão.
+
+- **3. Persistência dos Cálculos:**
+  Cada operação realizada deve ser registrada em um banco de dados local, associada ao usuário que realizou a operação.
+
+- **4. Visualização do Histórico:**
+  O usuário deve poder visualizar as últimas operações realizadas.
+
+- **5. Estrutura de Dados conforme Diagrama:**
+  O banco deve conter as tabelas `Usuario` e `Operacao`, com relacionamento 1:N, conforme o diagrama relacional apresentado.
+
+- **6. Utilização do Django e SQLite:**
+  O framework a ser utilizado é o Django, com banco de dados local SQLite.
+
+---
+
+### Como a aplicação resolve cada requisito
+
+- **Autenticação de Usuários:**
+  Utiliza o sistema nativo de autenticação do Django (`django.contrib.auth`).
+  - O registro de novos usuários é feito com formulário próprio, mas baseado no modelo padrão do Django.
+  - O login usa o `AuthenticationForm` do Django e funções nativas para autenticação e gerenciamento de sessão.
+  - As senhas são armazenadas de forma segura com hash.
+
+- **Operações Matemáticas:**
+  A interface da calculadora permite realizar soma, subtração, multiplicação e divisão.
+  - As expressões são avaliadas com segurança utilizando a biblioteca `asteval`, evitando riscos de execução de código malicioso.
+
+- **Persistência de Dados e Histórico:**
+  Cada operação realizada é salva na tabela `Operacao`, associada ao usuário autenticado, usando o ORM do Django e o banco SQLite.
+  - O histórico das últimas operações é exibido na interface da calculadora, recuperando os dados diretamente do banco.
+
+- **Estrutura de Dados conforme o Diagrama:**
+  O modelo segue a estrutura proposta:
+  - Usuários são representados pelo modelo padrão `User` do Django.
+  - Operações são armazenadas em um modelo específico (`Operacao`), com chave estrangeira para o usuário.
+  - O relacionamento 1:N entre usuário e operação é garantido pelo campo de chave estrangeira.
+
+- **Uso do Django e SQLite:**
+  O projeto está estruturado como uma aplicação Django padrão, utilizando SQLite como banco de dados local, conforme solicitado.
+
+- **Boas Práticas e Clareza de Código:**
+  O código é modular, organizado e segue a orientação a objetos e as melhores práticas recomendadas pelo Django.
+
+---
+
+Desta forma, a aplicação cobre todos os pontos do desafio, entregando um portal funcional, seguro e aderente aos requisitos propostos.
+
 ## Funcionalidades
 
 * **Calculadora Interativa:** Interface amigável para realizar as quatro operações aritméticas fundamentais.
