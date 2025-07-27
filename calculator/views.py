@@ -1,90 +1,101 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Operacao
-from asteval import Interpreter
+from django.shortcuts import (
+    render,
+    redirect,
+)  # Importa funções para renderizar templates HTML e redirecionar para outras URLs.
+from django.contrib.auth.decorators import (
+    login_required,
+)  # Importa o decorador 'login_required' para restringir o acesso a views apenas para usuários logados.
+from .models import (
+    Operacao,
+)  # Importa o modelo 'Operacao' que você definiu, usado para salvar o histórico de cálculos.
+from asteval import (
+    Interpreter,
+)  # Importa a classe 'Interpreter' da biblioteca 'asteval', que permite avaliar expressões matemáticas como strings.
 
+# Cria uma instância do interpretador 'asteval'.
+# Esta instância será usada para calcular o resultado das expressões matemáticas.
 aeval = Interpreter()
 
 
+# Decorador que garante que esta view só pode ser acessada por usuários autenticados.
+# Se o usuário não estiver logado, ele será redirecionado para a URL com o nome 'login'.
 @login_required(login_url='login')
 def calculator_view(request):
+    """
+    Função de visualização principal para a calculadora.
+    Exibe o histórico de operações do usuário e processa novas expressões.
+    """
+    # Busca as últimas 10 operações do usuário logado, ordenadas pela data de inclusão (mais recentes primeiro).
     historico = Operacao.objects.filter(usuario=request.user).order_by('-dt_inclusao')[
         :10
     ]
-    resultado = ''
-    expressao = ''
+
+    resultado = ''  # Inicializa a variável para o resultado do cálculo.
+    expressao = ''  # Inicializa a variável para a expressão recebida.
+
+    # Verifica se a requisição é um POST, o que indica que uma nova expressão foi enviada.
     if request.method == 'POST':
+        # Obtém a expressão do corpo da requisição POST e remove espaços em branco extras.
         expressao = request.POST.get('expressao', '').strip()
+
+        # Processa a expressão apenas se ela não estiver vazia.
         if expressao:
             try:
+                # Limpa a expressão, permitindo apenas dígitos, operadores (+-*/), ponto, parênteses e espaços.
+                # Isso ajuda a prevenir injeção de código ou caracteres indesejados.
                 expressao_limpa = ''.join(
                     c for c in expressao if c in '0123456789+-*/.() '
                 )
+
+                # Avalia a expressão limpa usando o interpretador 'asteval' e converte o resultado para string.
                 resultado = str(aeval(expressao_limpa))
+
+                # 'asteval' pode retornar 'None' para expressões inválidas ou incompletas, tratamos como 'Erro'.
                 if resultado == 'None':
                     resultado = 'Erro'
                 else:
+                    # Se o resultado for válido, salva a operação no histórico do banco de dados.
                     Operacao.objects.create(
                         usuario=request.user, parametros=expressao, resultado=resultado
                     )
             except Exception:
+                # Captura qualquer exceção durante a avaliação da expressão e define o resultado como 'Erro'.
                 resultado = 'Erro'
+
+            # Armazena o último resultado na sessão do usuário.
+            # Isso é útil para exibir o resultado na próxima requisição GET (após o redirecionamento).
             request.session['last_result'] = resultado
+
+            # Redireciona para a própria página da calculadora (GET) para evitar reenvio do formulário.
             return redirect('calculator')
+
+    # Após um redirecionamento POST, ou na primeira vez que a página é carregada (GET),
+    # tenta recuperar o último resultado da sessão e o remove dela.
     resultado = request.session.pop('last_result', '')
+
+    # Renderiza o template da calculadora, passando o histórico e o resultado para exibição.
     return render(
         request,
         'calculator/calculator.html',
         {
-            'historico': historico,
-            'resultado': resultado,
+            'historico': historico,  # Lista das últimas operações do usuário.
+            'resultado': resultado,  # O resultado do último cálculo (se houver).
         },
     )
 
 
-@login_required(login_url='login')
+@login_required(
+    login_url='login'
+)  # Garante que apenas usuários logados podem acessar esta view.
 def limpar_historico(request):
+    """
+    Função de visualização para limpar o histórico de operações de um usuário.
+    Só processa requisições POST para evitar limpeza acidental.
+    """
+    # Verifica se a requisição é um POST (envio do formulário de limpeza).
     if request.method == 'POST':
+        # Deleta todas as operações associadas ao usuário logado.
         Operacao.objects.filter(usuario=request.user).delete()
+
+    # Redireciona o usuário de volta para a página da calculadora após a limpeza.
     return redirect('calculator')
-
-
-"""
-Este código Python, escrito no framework Django, define duas views (funções que lidam com requisições web) para uma aplicação de calculadora.
-
-1.  **Importações Iniciais**:
-    *   `from django.shortcuts import render, redirect`: Importa funções para renderizar templates HTML e redirecionar requisições.
-    *   `from django.contrib.auth.decorators import login_required`: Importa um decorador que garante que um usuário esteja logado para acessar a view.
-    *   `from .models import Operacao`: Importa o modelo `Operacao` do mesmo diretório, que provavelmente representa uma operação matemática realizada pelo usuário.
-    *   `from asteval import Interpreter`: Importa a classe `Interpreter` da biblioteca `asteval`, que é usada para avaliar expressões matemáticas de forma segura.
-
-2.  **Instância do Interpretador**:
-    *   `aeval = Interpreter()`: Cria uma instância do interpretador `asteval`, que será usada para calcular as expressões.
-
-3.  **`calculator_view(request)`**:
-    *   `@login_required(login_url='login')`: Este decorador assegura que apenas usuários autenticados possam acessar esta view. Se um usuário não estiver logado, ele será redirecionado para a URL nomeada 'login'.
-    *   `historico = Operacao.objects.filter(usuario=request.user).order_by('-dt_inclusao')[:10]`: Recupera as últimas 10 operações (`Operacao`) realizadas pelo usuário atualmente logado, ordenadas da mais recente para a mais antiga.
-    *   `resultado = ''` e `expressao = ''`: Inicializam variáveis para armazenar o resultado do cálculo e a expressão digitada.
-    *   `if request.method == 'POST'`: Verifica se a requisição HTTP é do tipo POST (geralmente enviada por um formulário).
-        *   `expressao = request.POST.get('expressao', '').strip()`: Obtém o valor do campo 'expressao' do formulário POST.
-        *   `if expressao:`: Verifica se a expressão não está vazia.
-            *   `expressao_limpa = ''.join(c for c in expressao if c in '0123456789+-*/.() ')`: Filtra a expressão para permitir apenas dígitos, operadores matemáticos (`+`, `-`, `*`, `/`), ponto (`.`), parênteses e espaços. Isso é uma medida de segurança para evitar a execução de código malicioso.
-            *   `try...except Exception`: Bloco para tratar possíveis erros durante a avaliação da expressão.
-                *   `resultado = str(aeval(expressao_limpa))`: Usa o interpretador `aeval` para calcular o resultado da `expressao_limpa`. O resultado é convertido para string.
-                *   `if resultado == 'None': resultado = 'Erro'`: Se `asteval` retornar `None` (o que pode acontecer para algumas expressões inválidas), o resultado é definido como 'Erro'.
-                *   `else: Operacao.objects.create(...)`: Se o cálculo for bem-sucedido, uma nova entrada `Operacao` é criada no banco de dados, registrando o usuário, a expressão original (`parametros`) e o `resultado`.
-            *   `except Exception: resultado = 'Erro'`: Se qualquer erro ocorrer durante a avaliação (ex: divisão por zero, sintaxe inválida), o `resultado` é definido como 'Erro'.
-            *   `request.session['last_result'] = resultado`: Armazena o resultado na sessão do usuário. Isso é útil para exibir o resultado após um redirecionamento.
-            *   `return redirect('calculator')`: Redireciona o usuário de volta para a mesma view ('calculator'), o que ajuda a prevenir o reenvio do formulário ao atualizar a página e permite exibir o resultado da sessão.
-    *   `resultado = request.session.pop('last_result', '')`: Após o redirecionamento (ou em uma requisição GET inicial), recupera o último resultado da sessão e o remove da sessão.
-    *   `return render(...)`: Renderiza o template `calculator/calculator.html`, passando o `historico` das operações e o `resultado` atual para serem exibidos na página.
-
-4.  **`limpar_historico(request)`**:
-    *   `@login_required(login_url='login')`: Assim como a view da calculadora, esta view também exige que o usuário esteja logado.
-    *   `if request.method == 'POST'`: Verifica se a requisição é do tipo POST.
-        *   `Operacao.objects.filter(usuario=request.user).delete()`: Se for POST, todas as operações (`Operacao`) associadas ao usuário logado são removidas do banco de dados.
-    *   `return redirect('calculator')`: Redireciona o usuário de volta para a view da calculadora após a limpeza do histórico.
-
-
-
-"""

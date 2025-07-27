@@ -1,114 +1,118 @@
+// Aguarda o carregamento completo do DOM antes de executar o script.
 document.addEventListener('DOMContentLoaded', function () {
-  const display = document.getElementById('display');
-  const buttons = document.querySelectorAll('.calc-buttons .btn');
-  const form = document.getElementById('calc-form');
-  const input = document.getElementById('expressao-input');
+  // Obtém referências para os elementos HTML principais da calculadora.
+  const display = document.getElementById('display'); // Onde os números e resultados são exibidos.
+  const buttons = document.querySelectorAll('.calc-buttons .btn'); // Todos os botões da calculadora.
+  const form = document.getElementById('calc-form'); // O formulário que será submetido.
+  const input = document.getElementById('expressao-input'); // O campo de input escondido no formulário.
 
+  // Variável para armazenar a expressão matemática atual digitada.
   let current = '';
+  // Flag que indica se o resultado de uma operação anterior acabou de ser exibido no display.
+  // Isso ajuda a zerar o display ao iniciar uma nova operação.
   let resultJustShown = Boolean(
     display.textContent && display.textContent !== '0'
   );
 
+  /**
+   * Atualiza o conteúdo do display da calculadora.
+   * @param {string} val - O valor a ser exibido. Se for vazio, exibe '0'.
+   */
   function updateDisplay(val) {
     display.textContent = val || '0';
   }
 
-  // Zera resultado ao clicar em qualquer botão (exceto igual)
+  /**
+   * Zera a expressão atual ('current') e o display,
+   * caso um resultado tenha acabado de ser mostrado.
+   * Isso prepara a calculadora para uma nova entrada.
+   */
   function clearResultOnInput() {
     if (resultJustShown) {
       current = '';
       updateDisplay(current);
-      resultJustShown = false;
+      resultJustShown = false; // Reseta a flag após limpar o display.
     }
   }
 
+  // Adiciona um 'event listener' de clique a cada botão da calculadora.
   buttons.forEach((btn) => {
     btn.addEventListener('click', function () {
+      // Obtém o valor e a ação associados ao botão clicado.
       const val = btn.getAttribute('data-value');
       const action = btn.getAttribute('data-action');
+
+      // Lógica para diferentes ações dos botões.
       if (action === 'clear') {
+        // Botão 'C' (Limpar): Zera a expressão e o display.
         current = '';
         updateDisplay(current);
       } else if (action === 'equals') {
+        // Botão '=' (Igual): Se houver uma expressão, a submete via formulário.
         if (current) {
-          input.value = current;
-          form.submit();
+          input.value = current; // Define o valor do input escondido.
+          form.submit(); // Envia o formulário.
         }
       } else if (action === 'negate') {
-        clearResultOnInput();
+        // Botão '+/-' (Negar): Inverte o sinal do número atual.
+        clearResultOnInput(); // Limpa o resultado anterior, se houver.
         if (current) {
-          if (current.startsWith('-')) current = current.slice(1);
-          else current = '-' + current;
+          if (current.startsWith('-')) {
+            current = current.slice(1); // Remove o '-' se já for negativo.
+          } else {
+            current = '-' + current; // Adiciona o '-' se for positivo.
+          }
           updateDisplay(current);
         }
       } else if (action === 'percent') {
-        clearResultOnInput();
+        // Botão '%' (Porcentagem): Converte o número atual em sua representação percentual.
+        clearResultOnInput(); // Limpa o resultado anterior, se houver.
         if (current) {
           try {
+            // Tenta converter para float e dividir por 100.
             current = (parseFloat(current) / 100).toString();
             updateDisplay(current);
-          } catch (e) {}
+          } catch (e) {
+            // Ignora erros na conversão, caso o valor não seja numérico.
+          }
         }
       } else {
-        clearResultOnInput();
-        // Operadores × e ÷ substituídos por * e / para backend
+        // Demais botões (números e operadores).
+        clearResultOnInput(); // Limpa o resultado anterior, se houver.
+        // Mapeia operadores de exibição para operadores de cálculo para o backend.
         let toAdd = val;
-        if (val === '×') toAdd = '*';
-        if (val === '÷') toAdd = '/';
-        if (val === '−') toAdd = '-';
-        if (val === '+') toAdd = '+';
-        current += toAdd;
-        updateDisplay(current);
+        if (val === '×') toAdd = '*'; // Multiplicação
+        if (val === '÷') toAdd = '/'; // Divisão
+        if (val === '−') toAdd = '-'; // Subtração (unicode para compatibilidade visual)
+        if (val === '+') toAdd = '+'; // Adição
+        current += toAdd; // Adiciona o caractere à expressão atual.
+        updateDisplay(current); // Atualiza o display.
       }
     });
   });
 
-  // Permite backspace no teclado físico
+  // Adiciona um 'event listener' para eventos de teclado (keydown).
   document.addEventListener('keydown', function (e) {
+    // Permite usar a tecla Backspace para apagar caracteres.
     if (e.key === 'Backspace') {
-      clearResultOnInput();
-      current = current.slice(0, -1);
-      updateDisplay(current);
-      e.preventDefault();
+      clearResultOnInput(); // Limpa o resultado anterior, se houver.
+      current = current.slice(0, -1); // Remove o último caractere da expressão.
+      updateDisplay(current); // Atualiza o display.
+      e.preventDefault(); // Previne o comportamento padrão do navegador (voltar página).
     }
+    // Permite usar a tecla Enter para submeter a expressão.
     if (e.key === 'Enter') {
       if (current) {
-        input.value = current;
-        form.submit();
+        input.value = current; // Define o valor do input escondido.
+        form.submit(); // Envia o formulário.
       }
-      e.preventDefault();
+      e.preventDefault(); // Previne o comportamento padrão do navegador (submeter formulário ou nova linha).
     }
   });
 
-  // Zera resultado ao digitar no display pela primeira vez após mostrar resultado
+  // Adiciona uma classe CSS ao display se um resultado acabou de ser mostrado.
+  // Isso pode ser usado para estilos visuais específicos para o estado "resultado".
   if (resultJustShown) {
     display.classList.add('result-just-shown');
   }
 });
-
-/**
- * Este código JavaScript gerencia a lógica de front-end de uma calculadora simples. Ele escuta eventos de cliques nos botões da calculadora e de teclas pressionadas no teclado para manipular a entrada e exibição de expressões.
-
-Aqui está um detalhamento das suas funcionalidades:
-
-    Inicialização (DOMContentLoaded): O código espera que todo o HTML seja carregado antes de começar a executar. Ele obtém referências aos elementos HTML principais: o display da calculadora, todos os botões, o formulário e um campo de input oculto para a expressão.
-    Variáveis de Estado:
-        current: Armazena a expressão matemática atual que está sendo construída pelo usuário.
-        resultJustShown: Uma flag booleana que indica se um resultado acabou de ser exibido no display. Isso é usado para limpar a expressão atual quando o usuário começa a digitar um novo cálculo após ver um resultado.
-    updateDisplay(val): Uma função utilitária que atualiza o texto do elemento display da calculadora. Se nenhum valor for fornecido, ele exibe '0'.
-    clearResultOnInput(): Esta função verifica se um resultado acabou de ser exibido (resultJustShown). Se sim, ela zera a expressão current e atualiza o display, preparando a calculadora para uma nova entrada.
-    Manipulação de Botões (buttons.forEach):
-        Cada botão da calculadora recebe um ouvinte de evento de clique.
-        Limpar (data-action="clear"): Zera a expressão current e o display.
-        Igual (data-action="equals"): Se houver uma expressão em current, ele a atribui ao valor do campo de input oculto (input.value) e submete o formulário. Isso sugere que o cálculo real é feito por um backend.
-        Negar (data-action="negate"): Adiciona ou remove um sinal de menos da expressão atual.
-        Porcentagem (data-action="percent"): Divide o número atual por 100.
-        Outros botões (números e operadores): Chamam clearResultOnInput() e adicionam o valor do botão à expressão current. Ele também substitui os caracteres de operador de exibição (×, ÷, −) pelos seus equivalentes de programação (*, /, -) antes de adicioná-los à current, provavelmente para compatibilidade com o backend.
-    Manipulação de Teclado (document.addEventListener('keydown')):
-        Backspace: Permite que o usuário apague o último caractere da expressão current usando a tecla Backspace. Também chama clearResultOnInput().
-        Enter: Se houver uma expressão, ele submete o formulário, simulando o clique no botão "igual".
-        Em ambos os casos, e.preventDefault() é usado para evitar o comportamento padrão do navegador (como navegar para trás ou submeter o formulário de forma não controlada).
-    Estilo result-just-shown: Se a página carregar com um resultado já exibido no display, ele adiciona uma classe CSS result-just-shown ao display, que pode ser usada para aplicar estilos visuais específicos.
-
-
- */
